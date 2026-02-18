@@ -10,6 +10,7 @@ using UnityEngine.AddressableAssets;
 namespace EngineerRedux.Skills
 {
 	public static class EngiSkillManager {
+		public static SkillFamily turretWeaponSkillFamily;
 
 		// Called from EngineerRedux.EngineerReduxPlugin.Awake()
 		public static void Init() {
@@ -28,14 +29,14 @@ namespace EngineerRedux.Skills
 			SkillFamily specialSkillFamily = skillLocator.special.skillFamily;
 			// Modify Stationary Turret Skill
 			SkillDef stationaryTurretSkillDef = specialSkillFamily.variants[0].skillDef;
-			stationaryTurretSkillDef.skillName = "ENGI_SPECIAL_TURRET_STATIONARY_NAME";
+			stationaryTurretSkillDef.skillName = "PlaceStationaryTurret";
 			stationaryTurretSkillDef.skillNameToken = "ENGI_SPECIAL_TURRET_STATIONARY_NAME";
 			stationaryTurretSkillDef.skillDescriptionToken = "ENGI_SPECIAL_TURRET_STATIONARY_DESC";
 			LanguageAPI.Add(stationaryTurretSkillDef.skillNameToken, "Stationary Turret");
 			LanguageAPI.Add(stationaryTurretSkillDef.skillDescriptionToken, "Deploy a stationary turret. Has <style=cIsHealing> 150% health</style>, <style=cIsUtility> 30 armor</style>, and <style=cIsUtility>0% movespeed</style>.");
 			// Modify Mobile Turret Skill
 			SkillDef mobileTurretSkillDef = specialSkillFamily.variants[1].skillDef;
-			mobileTurretSkillDef.skillName = "ENGI_SPECIAL_TURRET_MOBILE_NAME";
+			mobileTurretSkillDef.skillName = "PlaceMobileTurret";
 			mobileTurretSkillDef.skillNameToken = "ENGI_SPECIAL_TURRET_MOBILE_NAME";
 			mobileTurretSkillDef.skillDescriptionToken = "ENGI_SPECIAL_TURRET_MOBILE_DESC";
 			LanguageAPI.Add(mobileTurretSkillDef.skillNameToken, "Mobile Turret");
@@ -44,7 +45,8 @@ namespace EngineerRedux.Skills
 
 			// SF::Turret Weapons
 			// 	Create Skill Family
-			SkillFamily turretWeaponSkillFamily = CreateSkillFamily(engiBodyPrefab, "TurretWeapon", "ENGI_REDUX_TURRET_WEAPON_SLOT");
+			turretWeaponSkillFamily = CreateSkillFamily(engiBodyPrefab, "TurretWeapon", "ENGI_REDUX_TURRET_WEAPON_SLOT");
+
 			ContentAddition.AddSkillFamily(turretWeaponSkillFamily);
 			// Add Grenades
 			ContentAddition.AddSkillDef(AddGrenadeTurretWeapon(turretWeaponSkillFamily));
@@ -52,16 +54,17 @@ namespace EngineerRedux.Skills
 			ContentAddition.AddSkillDef(AddGaussTurretWeapon(turretWeaponSkillFamily));
 			// Add Laser
 			ContentAddition.AddSkillDef(AddBeamTurretWeapon(turretWeaponSkillFamily));
+
 		}
 
-		public static SkillFamily CreateSkillFamily(GameObject bodyPrefab, string skillSlot, string skillSlotToken) {
+		public static SkillFamily CreateSkillFamily(GameObject bodyPrefab, string skillFamilyName, string skillSlotToken) {
 			SkillFamily skillFamily = ScriptableObject.CreateInstance<SkillFamily>();
-			(skillFamily as ScriptableObject).name = bodyPrefab.name + skillSlot + "Family";
+			(skillFamily as ScriptableObject).name = bodyPrefab.name + skillFamilyName;
 			skillFamily.variants = new SkillFamily.Variant[0];
 
 			// Creating a placeholder skill is required to get the game to show this skill family in the loadout menu.
 			GenericSkill placeHolderSkill = bodyPrefab.AddComponent<GenericSkill>();
-			placeHolderSkill.skillName = skillSlot;
+			placeHolderSkill.skillName = skillFamilyName;
 			placeHolderSkill.hideInCharacterSelect = true;
 			placeHolderSkill._skillFamily = skillFamily;
 
@@ -69,7 +72,7 @@ namespace EngineerRedux.Skills
 				// placeHolderSkill.SetLoadoutTitleTokenOverride(skillSlotToken);
 				placeHolderSkill.loadoutTitleToken = skillSlotToken;
 				// Convert camelCase `TurretWeapon` to spaced `Turret Weapon` for the language token
-				string skillSlotSpaced = System.Text.RegularExpressions.Regex.Replace(skillSlot, "(\\B[A-Z])", " $1");
+				string skillSlotSpaced = System.Text.RegularExpressions.Regex.Replace(skillFamilyName, "(\\B[A-Z])", " $1");
 				LanguageAPI.Add(skillSlotToken, skillSlotSpaced);
 			}
 
@@ -85,26 +88,18 @@ namespace EngineerRedux.Skills
 			};
 		}
 
-		public static SkillDef AddGrenadeTurretWeapon(SkillFamily skillFamily){
-			SkillDef skillDef = ScriptableObject.CreateInstance<SkillDef>();
-				skillDef.activationState = new SerializableEntityStateType(typeof(Idle));
-				skillDef.activationStateMachineName = "Weapon";
-				skillDef.baseMaxStock = 1;
-				skillDef.baseRechargeInterval = 1;
-				skillDef.beginSkillCooldownOnSkillEnd = false;
-				skillDef.cancelSprintingOnActivation = true;
-				skillDef.canceledFromSprinting = false;
-				skillDef.fullRestockOnAssign = true;
-				skillDef.interruptPriority = InterruptPriority.Skill;
-				skillDef.isCombatSkill = true;
-				skillDef.mustKeyPress = false;
-				skillDef.rechargeStock = 1;
-				skillDef.requiredStock = 1;
-				skillDef.stockToConsume = 1;
-				skillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiBodyFireGrenade.asset").WaitForCompletion().icon; // placeholder icon
-				skillDef.skillDescriptionToken = "ENGI_TURRET_WEAPON_GRENADE_DESC";
-				skillDef.skillName = "ENGI_TURRET_WEAPON_GRENADE_NAME";
-				skillDef.skillNameToken = "ENGI_TURRET_WEAPON_GRENADE_NAME";
+		public static TurretWeaponSelectorSkillDef AddGrenadeTurretWeapon(SkillFamily skillFamily){
+			TurretWeaponSelectorSkillDef skillDef = ScriptableObject.CreateInstance<TurretWeaponSelectorSkillDef>();
+			skillDef.activationState = new SerializableEntityStateType(typeof(Idle));
+			skillDef.activationStateMachineName = "Weapon";
+			skillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiBodyFireGrenade.asset").WaitForCompletion().icon; // placeholder icon
+			skillDef.skillDescriptionToken = "ENGI_TURRET_WEAPON_GRENADE_DESC";
+			skillDef.skillName = "ENGI_TURRET_WEAPON_GRENADE_NAME";
+			skillDef.skillNameToken = "ENGI_TURRET_WEAPON_GRENADE_NAME";
+			// Add a reference to the grenade turret weapon skillDef
+			// TODO implement a turret grenade skilldef
+			skillDef.selectedPrimarySkillDef = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiBodyFireGrenade.asset").WaitForCompletion();
+
 			// Add language tokens
 			LanguageAPI.Add(skillDef.skillNameToken, "Grenade Launcher");
 			LanguageAPI.Add(skillDef.skillDescriptionToken, "Turrets charge up to <style=cIsDamage>4</style> grenades that deal <style=cIsDamage>100% damage</style> each.");
@@ -114,26 +109,17 @@ namespace EngineerRedux.Skills
 
 			return skillDef;
 		}
-		public static SkillDef AddGaussTurretWeapon(SkillFamily skillFamily){
-			SkillDef skillDef = ScriptableObject.CreateInstance<SkillDef>();
-				skillDef.activationState = new SerializableEntityStateType(typeof(Idle));
-				skillDef.activationStateMachineName = "Weapon";
-				skillDef.baseMaxStock = 1;
-				skillDef.baseRechargeInterval = 1;
-				skillDef.beginSkillCooldownOnSkillEnd = false;
-				skillDef.cancelSprintingOnActivation = true;
-				skillDef.canceledFromSprinting = false;
-				skillDef.fullRestockOnAssign = true;
-				skillDef.interruptPriority = InterruptPriority.Skill;
-				skillDef.isCombatSkill = true;
-				skillDef.mustKeyPress = false;
-				skillDef.rechargeStock = 1;
-				skillDef.requiredStock = 1;
-				skillDef.stockToConsume = 1;
-				skillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFirePistol.asset").WaitForCompletion().icon; // placeholder icon
-				skillDef.skillDescriptionToken = "ENGI_TURRET_WEAPON_GAUSS_DESC";
-				skillDef.skillName = "ENGI_TURRET_WEAPON_GAUSS_NAME";
-				skillDef.skillNameToken = "ENGI_TURRET_WEAPON_GAUSS_NAME";
+		public static TurretWeaponSelectorSkillDef AddGaussTurretWeapon(SkillFamily skillFamily){
+			TurretWeaponSelectorSkillDef skillDef = ScriptableObject.CreateInstance<TurretWeaponSelectorSkillDef>();
+			skillDef.activationState = new SerializableEntityStateType(typeof(Idle));
+			skillDef.activationStateMachineName = "Weapon";
+			skillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFirePistol.asset").WaitForCompletion().icon; // placeholder icon
+			skillDef.skillDescriptionToken = "ENGI_TURRET_WEAPON_GAUSS_DESC";
+			skillDef.skillName = "ENGI_TURRET_WEAPON_GAUSS_NAME";
+			skillDef.skillNameToken = "ENGI_TURRET_WEAPON_GAUSS_NAME";
+			// Add a reference to the gauss turret weapon skillDef
+			skillDef.selectedPrimarySkillDef = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiTurretBodyTurret.asset").WaitForCompletion(); // Lmao, this is what they named the Engi Turret's default skillDef?
+
 			// Add language tokens
 			LanguageAPI.Add(skillDef.skillNameToken, "Gauss Cannon");
 			LanguageAPI.Add(skillDef.skillDescriptionToken, "Turrets fire <style=cIsDamage>70% damage</style> bullets, 3 times per second.");
@@ -143,26 +129,18 @@ namespace EngineerRedux.Skills
 
 			return skillDef;
 		}
-		public static SkillDef AddBeamTurretWeapon(SkillFamily skillFamily){
-			SkillDef skillDef = ScriptableObject.CreateInstance<SkillDef>();
-				skillDef.activationState = new SerializableEntityStateType(typeof(Idle));
-				skillDef.activationStateMachineName = "Weapon";
-				skillDef.baseMaxStock = 1;
-				skillDef.baseRechargeInterval = 1;
-				skillDef.beginSkillCooldownOnSkillEnd = false;
-				skillDef.cancelSprintingOnActivation = true;
-				skillDef.canceledFromSprinting = false;
-				skillDef.fullRestockOnAssign = true;
-				skillDef.interruptPriority = InterruptPriority.Skill;
-				skillDef.isCombatSkill = true;
-				skillDef.mustKeyPress = false;
-				skillDef.rechargeStock = 1;
-				skillDef.requiredStock = 1;
-				skillDef.stockToConsume = 1;
-				skillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
-				skillDef.skillDescriptionToken = "ENGI_TURRET_WEAPON_BEAM_DESC";
-				skillDef.skillName = "ENGI_TURRET_WEAPON_BEAM_NAME";
-				skillDef.skillNameToken = "ENGI_TURRET_WEAPON_BEAM_NAME";
+		public static TurretWeaponSelectorSkillDef AddBeamTurretWeapon(SkillFamily skillFamily){
+			TurretWeaponSelectorSkillDef skillDef = ScriptableObject.CreateInstance<TurretWeaponSelectorSkillDef>();
+			skillDef.activationState = new SerializableEntityStateType(typeof(Idle));
+			skillDef.activationStateMachineName = "Weapon";
+			skillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
+			skillDef.skillDescriptionToken = "ENGI_TURRET_WEAPON_BEAM_DESC";
+			skillDef.skillName = "ENGI_TURRET_WEAPON_BEAM_NAME";
+			skillDef.skillNameToken = "ENGI_TURRET_WEAPON_BEAM_NAME";
+			// Add a reference to the beam turret weapon skillDef
+			// TODO Increase distance to 50f;
+			skillDef.selectedPrimarySkillDef = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiTurretFireBeam.asset").WaitForCompletion();
+
 			// Add language tokens
 			LanguageAPI.Add(skillDef.skillNameToken, "Laser Cannon");
 			LanguageAPI.Add(skillDef.skillDescriptionToken, "Turrets fire a continuous laser that deals <style=cIsDamage>40% damage</style>, 5 times per second. <style=cIsUtility>Slows</style> enemies by <style=cIsUtility>50%</style> on hit.");
@@ -177,15 +155,10 @@ namespace EngineerRedux.Skills
 			SteppedSkillDef skillDef = ScriptableObject.CreateInstance<SteppedSkillDef>();
 				skillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.EntityStates.EngiGaussPrimaryState));
 				skillDef.activationStateMachineName = "Weapon";
-				skillDef.baseMaxStock = 1;
 				skillDef.baseRechargeInterval = 0f;
 				skillDef.beginSkillCooldownOnSkillEnd = true;
-				skillDef.cancelSprintingOnActivation = true;
 				skillDef.canceledFromSprinting = true;
-				skillDef.fullRestockOnAssign = true;
 				skillDef.interruptPriority = InterruptPriority.Any;
-				skillDef.isCombatSkill = true;
-				skillDef.mustKeyPress = false;
 				skillDef.rechargeStock = 0;
 				skillDef.requiredStock = 0;
 				skillDef.stockToConsume = 0;
@@ -211,15 +184,10 @@ namespace EngineerRedux.Skills
 			SkillDef skillDef = ScriptableObject.CreateInstance<SkillDef>();
 				skillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.EntityStates.EngiBeamPrimaryState));
 				skillDef.activationStateMachineName = "Weapon";
-				skillDef.baseMaxStock = 1;
 				skillDef.baseRechargeInterval = 0f;
 				skillDef.beginSkillCooldownOnSkillEnd = true;
-				skillDef.cancelSprintingOnActivation = true;
 				skillDef.canceledFromSprinting = true;
-				skillDef.fullRestockOnAssign = true;
 				skillDef.interruptPriority = InterruptPriority.Any;
-				skillDef.isCombatSkill = true;
-				skillDef.mustKeyPress = false;
 				skillDef.rechargeStock = 0;
 				skillDef.requiredStock = 0;
 				skillDef.stockToConsume = 0;

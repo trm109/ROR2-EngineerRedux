@@ -16,7 +16,7 @@ namespace EngineerRedux.EntityStates
 		public static float damageCoefficient = 2f / fireFrequency; // Default
 		public static float procCoefficient = 3f / fireFrequency; // This is calculated per fixed update tick in the original code.
 		public static float force = 0f;
-		public static float maxRange = 40f; // Default is 25, but for useability its buffed to 40 here.
+		public static float maxRange = 50f; // Default is 25, but for useability its buffed to 50.
 
 		// VFX references
 		// FireBeam doesn't use static variables for some reason, so I have to assign these at runtime.

@@ -28,6 +28,7 @@ namespace EngineerRedux
         {
             EngineerRedux.Skills.EngiSkillManager.Init(); // See Skills/EngiSkillManager.cs for more details.
             // Log to confirm addition.
+            EngineerRedux.Skills.TurretSkillManager.Init();
             //Log.LogInfo("Added Gauss and Beam attacks to Engineer's primary skill family.");
         }
 
