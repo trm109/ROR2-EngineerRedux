@@ -14,9 +14,12 @@
 
 		<PackageReference Include="BepInEx.Core" Version="5.4.21" />
 		<PackageReference Include="RoR2BepInExPack" Version="1.41.0" />
-		<PackageReference Include="R2API" Version="5.0.5" />
-		<!-- <PackageReference Include="R2API.Items" Version="1.0.*" /> -->
+		<!-- <PackageReference Include="R2API" Version="5.0.5" /> -->
+		<PackageReference Include="R2API.Core" Version="5.*" />
+		<PackageReference Include="R2API.ContentManagement" Version="1.0.*" />
 		<PackageReference Include="R2API.Language" Version="1.0.*" />
+		<PackageReference Include="R2API.Skills" Version="1.0.*" />
+		<PackageReference Include="R2API.Networking" Version="1.0.*" />
 
 		<PackageReference Include="UnityEngine.Modules" Version="2021.3.33" IncludeAssets="compile" />
 		<PackageReference Include="RiskOfRain2.GameLibs" Version="1.4.1-r.0" />

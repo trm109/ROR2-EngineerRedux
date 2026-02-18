@@ -1,5 +1,5 @@
 using System;
-using System.IO;
+using System.Runtime.CompilerServices;
 using BepInEx;
 using R2API;
 using RoR2;
@@ -9,7 +9,8 @@ using UnityEngine.AddressableAssets;
 
 namespace EngineerRedux
 {
-    [BepInDependency(R2API.ContentManagement.R2APIContentManager.PluginGUID)]
+    [BepInDependency(R2API.ContentManagement.R2APIContentManager.PluginGUID, BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency(R2API.SkillsAPI.PluginGUID, BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency(LanguageAPI.PluginGUID)]
 
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
