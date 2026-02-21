@@ -117,8 +117,13 @@ namespace EngineerRedux
             turretBeamSkillDef.fullRestockOnAssign = true;
             turretBeamSkillDef.beginSkillCooldownOnSkillEnd = false;
             turretBeamSkillDef.canceledFromSprinting = false;
-            turretBeamSkillDef.cancelSprintingOnActivation = false;
+            turretBeamSkillDef.cancelSprintingOnActivation = true;
             turretBeamSkillDef.baseRechargeInterval = 0f;
+            turretBeamSkillDef.baseMaxStock = 1;
+            turretBeamSkillDef.rechargeStock = 1;
+            turretBeamSkillDef.requiredStock = 1;
+            turretBeamSkillDef.stockToConsume = 1;
+            EngineerRedux.EntityStates.Turret.BeamPrimaryState.Init(); // Grabs VFX references
             turretBeamSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.EntityStates.Turret.BeamPrimaryState));
             turretBeamSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
             // Add the entity state

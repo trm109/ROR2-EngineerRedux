@@ -69,7 +69,6 @@ public static class SkillManager {
 		};
 	}
 
-	//TODO can we use `out`?
 	public static void AddLanguageTokens(SkillDef skillDef, string skillName, string skillDescription) {
 		// Generate a name token
 		// SkillNameExample -> SKILL_NAME_EXAMPLE
@@ -170,6 +169,7 @@ public static class SkillManager {
 			SkillLocator ownerSkillLocator = ownerBody.skillLocator;
 			foreach(GenericSkill skill in ownerSkillLocator.AllSkills) {
 				// Find Turret Body Type to change base stats
+				// TODO replace the nameToken comparison with a field accessor on the 'body skill def', similar to how turret weapon is handled.
 				if(skill.skillDef.skillName == "PlaceStationaryTurret") {
 					summonBody.baseMaxHealth = 195f;
 					summonBody.levelMaxHealth = 58.5f;

@@ -12,6 +12,7 @@ Does a few things:
 Need to implement later:
 - Configs.
 - RiskOfOptions Compat.
+- Change the head of the turret based on selected turret primary.
 - Documentation for adding your own Turret skills.
 - Add mod compatibility.
 - Add my own asset references instead of grabbing them at runtime.
