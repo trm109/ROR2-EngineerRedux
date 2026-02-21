@@ -7,16 +7,16 @@ using UnityEngine.AddressableAssets;
 // using EntityStates.Engi.EngiWeapon;
 using EntityStates.EngiTurret.EngiTurretWeapon;
 
-namespace EngineerRedux.EntityStates
+namespace EngineerRedux.EntityStates.Engi
 {
-	public class EngiBeamPrimaryState : BaseSkillState
+	public class BeamPrimaryState : BaseSkillState
 	{
 		// Lots of code was taken from SS2's Laser Focus ability, ty!
 		public static float fireFrequency = 5f; // Default
-		public static float damageCoefficient = 2f / fireFrequency; // Default
-		public static float procCoefficient = 3f / fireFrequency; // This is calculated per fixed update tick in the original code.
+		public static float damageCoefficient = .4f; // Default
+		public static float procCoefficient = 1f; // Default is 0.6f, this is a bit unfair for things like ATG.
 		public static float force = 0f;
-		public static float maxRange = 50f; // Default is 25, but for useability its buffed to 50.
+		public static float maxRange = 300f; // Default is 25, but for useability its buffed to 300.
 
 		// VFX references
 		// FireBeam doesn't use static variables for some reason, so I have to assign these at runtime.
@@ -27,7 +27,7 @@ namespace EngineerRedux.EntityStates
 		public static string laserLoopSoundString = "Play_engi_r_walkingTurret_laser_loop";
 		public static string laserEndSoundString = "Play_engi_r_walkingTurret_laser_end";
 
-		private Transform modelTransform; // reference to engi transform
+		// private Transform modelTransform; // reference to engi transform
 
 		private Transform leftMuzzleInstance;
 		private Transform rightMuzzleInstance;
@@ -91,7 +91,7 @@ namespace EngineerRedux.EntityStates
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			modelTransform = base.GetModelTransform();
+			Transform modelTransform = base.GetModelTransform();
 			Ray aimRay = base.GetAimRay();
 			StartAimMode(aimRay, 3f);
 

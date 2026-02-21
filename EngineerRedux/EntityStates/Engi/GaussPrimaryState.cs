@@ -6,19 +6,19 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 // Referencing Base Games Engi turret
-using EntityStates.EngiTurret.EngiTurretWeapon;
-using EntityStates.Engi.EngiWeapon;
+// using EntityStates.EngiTurret.EngiTurretWeapon;
+//using EntityStates.Engi.EngiWeapon;
 
-namespace EngineerRedux.EntityStates
+namespace EngineerRedux.EntityStates.Engi
 {
-	public class EngiGaussPrimaryState : BaseSkillState, SteppedSkillDef.IStepSetter
+	public class GaussPrimaryState : BaseSkillState, SteppedSkillDef.IStepSetter
 	{
 
-		public static float baseDuration = FireGauss.baseDuration / 2f; // Turret is default 35, engi basically has two turrets on his back.
+		public static float baseDuration = 0.35f / 2f; // Turret is default 35, engi basically has two turrets on his back.
 		private float duration;
 
-		public static float damageCoefficient = FireGauss.damageCoefficient;
-		public static float force = FireGauss.force;
+		public static float damageCoefficient = 0.7f;
+		public static float force = 200f;
 		public static float maxRange = 300f;
 
 		// stealing these from Commando's M1
@@ -27,12 +27,11 @@ namespace EngineerRedux.EntityStates
 		public static float trajectoryAimAssistMultiplier = 0.75f;
 
 		// VFX references
-		public static GameObject muzzleEffectPrefab = FireGrenades.effectPrefab;
-		// Create a copy of the above GameObject, scale it down to .5
-		public static GameObject hitEffectPrefab = FireGauss.hitEffectPrefab;
-		public static GameObject tracerEffectPrefab = FireGauss.tracerEffectPrefab;
+		public static GameObject muzzleEffectPrefab;
+		public static GameObject hitEffectPrefab;
+		public static GameObject tracerEffectPrefab;
 		// Reusing Gauss Turret SFX
-		public static string attackSoundString = FireGauss.attackSoundString;
+		public static string attackSoundString = "Play_engi_R_turret_shot";
 
 		private Transform modelTransform; // reference to engi transform
 		//private Ray projectileRay; // swaps between muzzles
@@ -41,6 +40,13 @@ namespace EngineerRedux.EntityStates
 
 		void SteppedSkillDef.IStepSetter.SetStep(int i){
 			step = i;
+		}
+
+		public static void Init() {
+			// Assign VFX references
+			muzzleEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/MuzzleflashEngiTurret.prefab").WaitForCompletion();
+			hitEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/ImpactEngiTurret.prefab").WaitForCompletion();
+			tracerEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/TracerEngiTurret.prefab").WaitForCompletion();
 		}
 
 		private Vector3 GetAimEndPoint(Ray aimRay){
@@ -87,7 +93,6 @@ namespace EngineerRedux.EntityStates
 				bulletAttack.origin = muzzlePosition;
 				Vector3 aimEndPoint = GetAimEndPoint(aimRay);
 				bulletAttack.aimVector = (aimEndPoint - muzzlePosition).normalized;
-
 				bulletAttack.minSpread = 0f;
 				bulletAttack.maxSpread = base.characterBody.spreadBloomAngle;
 				bulletAttack.damage = damageCoefficient * damageStat;
