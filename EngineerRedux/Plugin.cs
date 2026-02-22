@@ -30,6 +30,7 @@ namespace EngineerRedux
         {
             Utils.SkillManager.Init();
 
+            UnlockableDef mobileTurretUnlockableDef = Addressables.LoadAssetAsync<UnlockableDef>("RoR2/Base/Engi/Skills.Engi.WalkerTurret.asset").WaitForCompletion();
             // Add your new skill Definitions here.
             // Primaries:
             // - Gauss
@@ -70,8 +71,25 @@ namespace EngineerRedux
 
             // Add the entity state
             ContentAddition.AddEntityState(typeof(EngineerRedux.EntityStates.Engi.BeamPrimaryState), out _);
-            // Add to skillFamily
-            Utils.SkillManager.AddEngiPrimary(beamSkillDef, "LaserBeam", "Fire two continuous lasers that deal <style=cIsDamage>2x40% damage</style>, 5 times per second. <style=cIsUtility>Slows</style> enemies by <style=cIsUtility>50%</style> on hit.");
+            // Here, I'm reusing the mobile turret unloackable Def
+            Utils.SkillManager.AddEngiPrimary(beamSkillDef, "LaserBeam", "Fire two continuous lasers that deal <style=cIsDamage>2x40% damage</style>, 5 times per second. <style=cIsUtility>Slows</style> enemies by <style=cIsUtility>50%</style> on hit.", mobileTurretUnlockableDef);
+            // Turret Bodies:
+            // - Stationary Turret
+            SkillDef stationaryTurretSkillDef = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiBodyPlaceTurret.asset").WaitForCompletion();
+            Utils.TurretBodyStats stationaryStats = Utils.TurretBodyStats.Default;
+            stationaryStats.movespeed = 0f;
+            stationaryStats.maxHealth = 195f;
+            stationaryStats.maxHealthInc = 58.5f;
+            stationaryStats.healthRegen = 0.9f;
+            stationaryStats.healthRegenInc = 0.18f;
+            stationaryStats.armor = 30f;
+            Utils.SkillManager.AddEngiTurretBody(stationaryTurretSkillDef, "StationaryTurret", "Summon a stationary turret with <style=cIsUtility>High health</style>, but <style=cIsUtility>cannot move</style>.", stationaryStats);
+
+            // - Mobile Turret
+            SkillDef mobileTurretSkillDef = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiBodyPlaceWalkerTurret.asset").WaitForCompletion();
+            Utils.TurretBodyStats mobileStats = Utils.TurretBodyStats.Default;
+            mobileStats.movespeed = 8f;
+            Utils.SkillManager.AddEngiTurretBody(mobileTurretSkillDef, "MobileTurret", "Summon a mobile turret with <style=cIsUtility>decent health and movement</style>.", mobileStats, mobileTurretUnlockableDef);
 
             // Turret Weapons:
             // - Grenade
@@ -128,33 +146,11 @@ namespace EngineerRedux
             turretBeamSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
             // Add the entity state
             ContentAddition.AddEntityState(typeof(EngineerRedux.EntityStates.Turret.BeamPrimaryState), out _);
+            // Here, I'm reusing the mobile turret unloackable Def
+            Utils.SkillManager.AddEngiTurretWeapon(turretBeamSkillDef, "TurretLaserBeam", "Fire a continuous laser that deals <style=cIsDamage>40% damage</style>, 5 times per second. <style=cIsUtility>Slows</style> enemies by <style=cIsUtility>50%</style> on hit.", mobileTurretUnlockableDef);
 
-            Utils.SkillManager.AddEngiTurretWeapon(turretBeamSkillDef, "TurretLaserBeam", "Fire a continuous laser that deals <style=cIsDamage>40% damage</style>, 5 times per second. <style=cIsUtility>Slows</style> enemies by <style=cIsUtility>50%</style> on hit.");
-
-            // // Requires assets that I have to reference at runtime...
-            // EngineerRedux.EntityStates.EngiBeamPrimaryState.Init();
-            //
-            // SkillDef skillDef = ScriptableObject.CreateInstance<SkillDef>();
-            // skillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.EntityStates.EngiBeamPrimaryState));
-            // skillDef.activationStateMachineName = "Weapon";
-            // skillDef.baseRechargeInterval = 0f;
-            // skillDef.beginSkillCooldownOnSkillEnd = true;
-            // skillDef.canceledFromSprinting = true;
-            // skillDef.interruptPriority = InterruptPriority.Any;
-            // skillDef.rechargeStock = 0;
-            // skillDef.requiredStock = 0;
-            // skillDef.stockToConsume = 0;
-            // skillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
-            // skillDef.skillDescriptionToken = "ENGI_PRIMARY_BEAM_DESC";
-            // skillDef.skillName = "ENGI_PRIMARY_BEAM_NAME";
-            // skillDef.skillNameToken = "ENGI_PRIMARY_BEAM_NAME";
-            //
-            // // Add to skillFamily
-            // LanguageAPI.Add(skillDef.skillNameToken, "Laser Cannon");
-            // LanguageAPI.Add(skillDef.skillDescriptionToken, "Fire two continuous lasers that deal <style=cIsDamage>2x40% damage</style>, 5 times per second. <style=cIsUtility>Slows</style> enemies by <style=cIsUtility>50%</style> on hit.");
-            //
-            // // Add to skillFamily
-            // AddSkillToFamily(skillDef, skillFamily);
+            // Set the default turret weapon to gauss
+            Utils.SkillManager.engiTurretWeaponSkillFamily.defaultVariantIndex = 1;
 
         }
 

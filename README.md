@@ -12,14 +12,16 @@ Does a few things:
 Need to implement later:
 - Configs.
 - RiskOfOptions Compat.
-- Change the head of the turret based on selected turret primary.
-- Documentation for adding your own Turret skills.
-- Add mod compatibility.
-- Add my own asset references instead of grabbing them at runtime.
+- Implement and test base stat modifications (based on mobility type).
 - AI improvements.
     - Increase max range.
     - Make mobile turrets not stupid.
     - Some target priority logic.
+- Change the head of the turret based on selected turret primary.
+- Fix skill names (needs to be human readable).
+- Documentation for adding your own Turret skills.
+- Add mod compatibility.
+- Add my own asset references instead of grabbing them at runtime.
 - EngineerReduxExtended:
     - 'Drone' turret body type.
     - Flamethrower weapon
