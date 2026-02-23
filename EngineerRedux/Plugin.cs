@@ -51,7 +51,7 @@ namespace EngineerRedux
             gaussSkillDef.stepGraceDuration = 3f; // time allowed between steps before it resets to the first barrel
 
             // Add the entity state
-		    ContentAddition.AddEntityState(typeof(EngineerRedux.EntityStates.Engi.GaussPrimaryState), out _);
+            ContentAddition.AddEntityState(typeof(EngineerRedux.EntityStates.Engi.GaussPrimaryState), out _);
             // Add to skillFamily
             Utils.SkillManager.AddEngiPrimary(gaussSkillDef, "GaussCannon", "Fire <style=cIsDamage>2x70% damage</style> bullets, 3 times per second.");
             // - Beam
