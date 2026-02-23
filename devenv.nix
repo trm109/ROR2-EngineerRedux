@@ -18,6 +18,7 @@ rec {
     pkgs.git
     pkgs.dotnet-sdk
     pkgs.ilspycmd
+    pkgs.dotnet-outdated
   ];
 
   # https://devenv.sh/languages/
@@ -37,26 +38,32 @@ rec {
   # scripts.hello.exec = ''
   #   echo hello from $GREET
   # '';
-  scripts.build.exec = ''
-    echo "Building project"
-    dotnet build -o Output
-    if [ $? -ne 0 ]; then
-      echo "Build failed"
-      exit 1
-    else
-      echo "Build succeeded"
-    fi
+  scripts = {
+    update.exec = ''
+      devenv update
+      dotnet outdated --upgrade --exclude 'UnityEngine.Modules'
+    '';
+    build.exec = ''
+      echo "Building project"
+      dotnet build -o Output
+      if [ $? -ne 0 ]; then
+        echo "Build failed"
+        exit 1
+      else
+        echo "Build succeeded"
+      fi
 
-    echo "Ensuring symlink to ${env.EXPORT_LOCATION}"
-    rm ${env.EXPORT_LOCATION}
-    ln -sf $(pwd)/Output ${env.EXPORT_LOCATION}
-    if [ $? -ne 0 ]; then
-      echo "Failed to create symlink"
-      exit 1
-    else
-      echo "Symlink created successfully"
-    fi
-  '';
+      echo "Ensuring symlink to ${env.EXPORT_LOCATION}"
+      rm ${env.EXPORT_LOCATION}
+      ln -sf $(pwd)/Output ${env.EXPORT_LOCATION}
+      if [ $? -ne 0 ]; then
+        echo "Failed to create symlink"
+        exit 1
+      else
+        echo "Symlink created successfully"
+      fi
+    '';
+  };
 
   # https://devenv.sh/basics/
   # enterShell = ''
@@ -78,6 +85,15 @@ rec {
 
   # https://devenv.sh/git-hooks/
   # git-hooks.hooks.shellcheck.enable = true;
+  git-hooks.hooks = {
+    dotnet-format = {
+      entry = "dotnet format";
+    };
+    build = {
+      entry = "dotnet build";
+      after = [ "dotnet-format" ];
+    };
+  };
 
   # See full reference at https://devenv.sh/reference/options/
 }
