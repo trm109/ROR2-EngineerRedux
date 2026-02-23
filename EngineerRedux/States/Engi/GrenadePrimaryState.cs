@@ -1,9 +1,12 @@
-using RoR2;
-// using UnityEngine;
-using EntityStates.Engi.EngiWeapon;
+// <copyright file="GrenadePrimaryState.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
-namespace EngineerRedux.EntityStates.Engi
+namespace EngineerRedux.States.Engi
 {
+    using EntityStates.Engi.EngiWeapon;
+    using RoR2;
+
     public class GrenadePrimaryState : ChargeGrenades
     {
         // Grab the default values from the prefab.

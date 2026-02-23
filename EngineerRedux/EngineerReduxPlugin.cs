@@ -1,37 +1,51 @@
-using System;
-using System.Runtime.CompilerServices;
-using BepInEx;
-using R2API;
-using RoR2;
-using RoR2.Skills;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
-using EntityStates;
-using EntityStates.EngiTurret.EngiTurretWeapon;
+// <copyright file="EngineerReduxPlugin.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace EngineerRedux
 {
-    [BepInDependency(R2API.ContentManagement.R2APIContentManager.PluginGUID, BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency(R2API.SkillsAPI.PluginGUID, BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency(LanguageAPI.PluginGUID)]
+    using System;
+    using System.Runtime.CompilerServices;
+    using BepInEx;
+    using EntityStates;
 
+    // using EntityStates.EngiTurret.EngiTurretWeapon;
+    using R2API;
+    using RoR2;
+    using RoR2.Skills;
+    using UnityEngine;
+    using UnityEngine.AddressableAssets;
+
+    [BepInDependency(LanguageAPI.PluginGUID)]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
+
+#pragma warning disable SA1600, CS1591 // Elements should be documented
     public class EngineerReduxPlugin : BaseUnityPlugin
     {
+#pragma warning disable SA1600, CS1591 // Elements should be documented
         public const string PluginGUID = PluginAuthor + "." + PluginName;
+#pragma warning disable SA1600, CS1591// Elements should be documented
         public const string PluginAuthor = "Saik3617";
+#pragma warning disable SA1600, CS1591// Elements should be documented
         public const string PluginName = "EngineerRedux";
+#pragma warning disable SA1600, CS1591// Elements should be documented
         public const string PluginVersion = "1.0.0";
 
         // private GameObject engiBody = Addressables.LoadAssetAsync<GameObject>((object)"RoR2/Base/Engi/EngiBody.prefab").WaitForCompletion();
         // private GameObject engiBody = Addressables.LoadAssetAsync<GameObject>((object)"RoR2/Base/Engi/EngiTurretBody.prefab").WaitForCompletion();
 
-        public void Awake()
+        /// <summary>
+        /// Method for BepInEx to call when loading the plugin. Ignore this.
+        /// </summary>
+        public static void Awake()
         {
             Utils.SkillManager.Init();
 
+            // !!!Everything after this point also serves as an example for how to use this library!!!
+
+            // This will be used for a few skills later.
             UnlockableDef mobileTurretUnlockableDef = Addressables.LoadAssetAsync<UnlockableDef>("RoR2/Base/Engi/Skills.Engi.WalkerTurret.asset").WaitForCompletion();
-            // Add your new skill Definitions here.
+
             // Primaries:
             // - Gauss
             SteppedSkillDef gaussSkillDef = ScriptableObject.CreateInstance<SteppedSkillDef>();
@@ -44,16 +58,18 @@ namespace EngineerRedux
             gaussSkillDef.rechargeStock = 0;
             gaussSkillDef.requiredStock = 0;
             gaussSkillDef.stockToConsume = 0;
-            EngineerRedux.EntityStates.Engi.GaussPrimaryState.Init(); // Grabs hit effect, tracer, other vfx prefabs.
-            gaussSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.EntityStates.Engi.GaussPrimaryState));
+            EngineerRedux.States.Engi.GaussPrimaryState.Init(); // Grabs hit effect, tracer, other vfx prefabs.
+            gaussSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.States.Engi.GaussPrimaryState));
             gaussSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFirePistol.asset").WaitForCompletion().icon; // placeholder icon
             gaussSkillDef.stepCount = 2; // used to alternate between the two barrels
             gaussSkillDef.stepGraceDuration = 3f; // time allowed between steps before it resets to the first barrel
 
             // Add the entity state
-            ContentAddition.AddEntityState(typeof(EngineerRedux.EntityStates.Engi.GaussPrimaryState), out _);
+            ContentAddition.AddEntityState(typeof(EngineerRedux.States.Engi.GaussPrimaryState), out _);
+
             // Add to skillFamily
             Utils.SkillManager.AddEngiPrimary(gaussSkillDef, "GaussCannon", "Fire <style=cIsDamage>2x70% damage</style> bullets, 3 times per second.");
+
             // - Beam
             SkillDef beamSkillDef = ScriptableObject.CreateInstance<SkillDef>();
             beamSkillDef.activationStateMachineName = "Weapon";
@@ -65,30 +81,35 @@ namespace EngineerRedux
             beamSkillDef.rechargeStock = 0;
             beamSkillDef.requiredStock = 0;
             beamSkillDef.stockToConsume = 0;
-            EngineerRedux.EntityStates.Engi.BeamPrimaryState.Init(); // Grabs VFX references
-            beamSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.EntityStates.Engi.BeamPrimaryState));
+            EngineerRedux.States.Engi.BeamPrimaryState.Init(); // Grabs VFX references
+            beamSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.States.Engi.BeamPrimaryState));
             beamSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
 
             // Add the entity state
-            ContentAddition.AddEntityState(typeof(EngineerRedux.EntityStates.Engi.BeamPrimaryState), out _);
+            ContentAddition.AddEntityState(typeof(EngineerRedux.States.Engi.BeamPrimaryState), out _);
+
             // Here, I'm reusing the mobile turret unloackable Def
             Utils.SkillManager.AddEngiPrimary(beamSkillDef, "LaserBeam", "Fire two continuous lasers that deal <style=cIsDamage>2x40% damage</style>, 5 times per second. <style=cIsUtility>Slows</style> enemies by <style=cIsUtility>50%</style> on hit.", mobileTurretUnlockableDef);
+
             // Turret Bodies:
             // - Stationary Turret
             SkillDef stationaryTurretSkillDef = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiBodyPlaceTurret.asset").WaitForCompletion();
-            Utils.TurretBodyStats stationaryStats = Utils.TurretBodyStats.Default;
-            stationaryStats.movespeed = 0f;
-            stationaryStats.maxHealth = 195f;
-            stationaryStats.maxHealthInc = 58.5f;
-            stationaryStats.healthRegen = 0.9f;
-            stationaryStats.healthRegenInc = 0.18f;
-            stationaryStats.armor = 30f;
+
+            // Utils.TurretBodyStats stationaryStats = Utils.TurretBodyStats.Default;
+            Utils.TurretBodyStats stationaryStats = new Utils.TurretBodyStats(
+                 maxHealth: 195f,
+                 maxHealthInc: 58.5f,
+                 healthRegen: 0.9f,
+                 healthRegenInc: 0.18f,
+                 armor: 30f,
+                 movespeed: 0f);
             Utils.SkillManager.AddEngiTurretBody(stationaryTurretSkillDef, "StationaryTurret", "Summon a stationary turret with <style=cIsUtility>High health</style>, but <style=cIsUtility>cannot move</style>.", stationaryStats);
 
             // - Mobile Turret
             SkillDef mobileTurretSkillDef = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiBodyPlaceWalkerTurret.asset").WaitForCompletion();
-            Utils.TurretBodyStats mobileStats = Utils.TurretBodyStats.Default;
-            mobileStats.movespeed = 8f;
+            Utils.TurretBodyStats mobileStats = new Utils.TurretBodyStats(
+                movespeed: 8f);
+
             Utils.SkillManager.AddEngiTurretBody(mobileTurretSkillDef, "MobileTurret", "Summon a mobile turret with <style=cIsUtility>decent health and movement</style>.", mobileStats, mobileTurretUnlockableDef);
 
             // Turret Weapons:
@@ -103,16 +124,19 @@ namespace EngineerRedux
             turretGrenadeSkillDef.requiredStock = 1;
             turretGrenadeSkillDef.stockToConsume = 1;
             turretGrenadeSkillDef.dontAllowPastMaxStocks = true;
+
             // turretGrenadeSkillDef.fullRestockOnAssign = true;
             turretGrenadeSkillDef.beginSkillCooldownOnSkillEnd = true;
             turretGrenadeSkillDef.canceledFromSprinting = false;
             turretGrenadeSkillDef.cancelSprintingOnActivation = false;
-            EngineerRedux.EntityStates.Turret.GrenadePrimaryState.Init(); // Grabs VFX references
-            turretGrenadeSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.EntityStates.Turret.GrenadePrimaryState));
+            EngineerRedux.States.Turret.GrenadePrimaryState.Init(); // Grabs VFX references
+            turretGrenadeSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.States.Turret.GrenadePrimaryState));
             turretGrenadeSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiBodyFireGrenade.asset").WaitForCompletion().icon;
+
             // Add the entity state
-            ContentAddition.AddEntityState(typeof(EngineerRedux.EntityStates.Turret.GrenadePrimaryState), out _);
+            ContentAddition.AddEntityState(typeof(EngineerRedux.States.Turret.GrenadePrimaryState), out _);
             Utils.SkillManager.AddEngiTurretWeapon(turretGrenadeSkillDef, "TurretGrenadeLauncher", "Charge up to 4 grenades, dealing <style=cIsDamage>100% damage</style> each.");
+
             // - Gauss
             SkillDef turretGaussSkillDef = ScriptableObject.CreateInstance<SkillDef>();
             turretGaussSkillDef.activationStateMachineName = "Weapon";
@@ -122,12 +146,14 @@ namespace EngineerRedux
             turretGaussSkillDef.canceledFromSprinting = false;
             turretGaussSkillDef.cancelSprintingOnActivation = false;
             turretGaussSkillDef.baseRechargeInterval = 0f;
-            turretGaussSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.EntityStates.Turret.GaussPrimaryState));
+            turretGaussSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.States.Turret.GaussPrimaryState));
             turretGaussSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFirePistol.asset").WaitForCompletion().icon; // placeholder icon
-            // Add the entity state
-            ContentAddition.AddEntityState(typeof(EngineerRedux.EntityStates.Turret.GaussPrimaryState), out _);
 
-            Utils.SkillManager.AddEngiTurretWeapon(turretGaussSkillDef, "TurretGaussCannon", "Fire <style=cIsDamage>70% damage</style> bullets, 3 times per second.");
+            // Add the entity state
+            ContentAddition.AddEntityState(typeof(EngineerRedux.States.Turret.GaussPrimaryState), out _);
+
+            Utils.SkillManager.AddEngiTurretWeapon(turretGaussSkillDef, "TurretGaussCannon", "Fire <style=cIsDamage>70% damage</style> bullets, 3 times per second.", isDefaultVariant: true);
+
             // - Beam
             SkillDef turretBeamSkillDef = ScriptableObject.CreateInstance<SkillDef>();
             turretBeamSkillDef.activationStateMachineName = "Weapon";
@@ -141,18 +167,15 @@ namespace EngineerRedux
             turretBeamSkillDef.rechargeStock = 1;
             turretBeamSkillDef.requiredStock = 1;
             turretBeamSkillDef.stockToConsume = 1;
-            EngineerRedux.EntityStates.Turret.BeamPrimaryState.Init(); // Grabs VFX references
-            turretBeamSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.EntityStates.Turret.BeamPrimaryState));
+            EngineerRedux.States.Turret.BeamPrimaryState.Init(); // Grabs VFX references
+            turretBeamSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.States.Turret.BeamPrimaryState));
             turretBeamSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
+
             // Add the entity state
-            ContentAddition.AddEntityState(typeof(EngineerRedux.EntityStates.Turret.BeamPrimaryState), out _);
+            ContentAddition.AddEntityState(typeof(EngineerRedux.States.Turret.BeamPrimaryState), out _);
+
             // Here, I'm reusing the mobile turret unloackable Def
             Utils.SkillManager.AddEngiTurretWeapon(turretBeamSkillDef, "TurretLaserBeam", "Fire a continuous laser that deals <style=cIsDamage>40% damage</style>, 5 times per second. <style=cIsUtility>Slows</style> enemies by <style=cIsUtility>50%</style> on hit.", mobileTurretUnlockableDef);
-
-            // Set the default turret weapon to gauss
-            Utils.SkillManager.engiTurretWeaponSkillFamily.defaultVariantIndex = 1;
-
         }
-
     }
 }
