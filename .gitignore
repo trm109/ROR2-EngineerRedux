@@ -9,7 +9,11 @@ devenv.local.yaml
 # pre-commit
 .pre-commit-config.yaml
 
+# dotnet
+.config/
+
 # Output directories
 obj/
 bin/
 Output/
+Thunderstore/

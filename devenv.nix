@@ -16,15 +16,16 @@ rec {
   # https://devenv.sh/packages/
   packages = [
     pkgs.git
-    pkgs.dotnet-sdk
     pkgs.ilspycmd
     pkgs.dotnet-outdated
+    pkgs.zip
   ];
 
   # https://devenv.sh/languages/
   # languages.rust.enable = true;
   languages.dotnet = {
     enable = true;
+    package = pkgs.dotnet-sdk_9;
     # lsp.enable = true;
   };
 
@@ -40,12 +41,15 @@ rec {
   # '';
   scripts = {
     update.exec = ''
+      cd ${config.devenv.root}
       devenv update
-      dotnet outdated --upgrade --exclude 'UnityEngine.Modules'
+      dotnet outdated --upgrade --exclude 'UnityEngine.Modules' --exclude 'BepInEx.Core' --exclude 'BepInEx.Analyzers' EngineerRedux/EngineerRedux.csproj
+      cd -
     '';
     build.exec = ''
+      cd ${config.devenv.root}
       echo "Building project"
-      dotnet build -o Output
+      dotnet build EngineerRedux/EngineerRedux.csproj -o Output
       if [ $? -ne 0 ]; then
         echo "Build failed"
         exit 1
@@ -62,6 +66,24 @@ rec {
       else
         echo "Symlink created successfully"
       fi
+      cd -
+    '';
+    package.exec = ''
+      cd ${config.devenv.root}
+      build
+      if [ $? -ne 0 ]; then
+        echo "Build failed, skipping packaging"
+        exit 1
+      fi
+      echo "Packaging project"
+      mkdir -p Thunderstore
+      rm -rf Thunderstore/*
+      cp -r Output/* Thunderstore/
+      cp README.md Thunderstore/
+      cp -r Meta/* Thunderstore/
+      cd Thunderstore/
+      zip -r EngineerRedux.zip *
+      cd -
     '';
   };
 
@@ -87,11 +109,15 @@ rec {
   # git-hooks.hooks.shellcheck.enable = true;
   git-hooks.hooks = {
     dotnet-format = {
-      entry = "dotnet format";
+      enable = true;
+      entry = "dotnet format EngineerRedux/";
+      pass_filenames = false;
     };
     build = {
-      entry = "dotnet build";
+      enable = true;
+      entry = "dotnet build EngineerRedux/EngineerRedux.csproj -o Output";
       after = [ "dotnet-format" ];
+      pass_filenames = false;
     };
   };
 

@@ -1,0 +1,13 @@
+﻿{
+	"name": "EngineerRedux",
+	"version_number": "1.0.3",
+	"website_url": "https://github.com/trm109/ROR2-EngineerRedux",
+	"description": "A mod and library aimed at expanding Engineer's loadout.",
+	"dependencies": [
+		"bbepis-BepInExPack-5.4.2108",
+		"RiskofThunder-HookGenPatcher-1.2.3",
+		"RiskofThunder-R2API_Skills-1.0.4",
+		"RiskofThunder-R2API_Language-1.1.0",
+		"RiskofThunder-R2API_ContentManagement-1.0.10"
+	]
+}

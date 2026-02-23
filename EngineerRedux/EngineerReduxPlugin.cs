@@ -25,11 +25,11 @@ namespace EngineerRedux
 #pragma warning disable SA1600, CS1591 // Elements should be documented
         public const string PluginGUID = PluginAuthor + "." + PluginName;
 #pragma warning disable SA1600, CS1591// Elements should be documented
-        public const string PluginAuthor = "Saik3617";
+        public const string PluginAuthor = "Saik";
 #pragma warning disable SA1600, CS1591// Elements should be documented
         public const string PluginName = "EngineerRedux";
 #pragma warning disable SA1600, CS1591// Elements should be documented
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.3";
 
         // private GameObject engiBody = Addressables.LoadAssetAsync<GameObject>((object)"RoR2/Base/Engi/EngiBody.prefab").WaitForCompletion();
         // private GameObject engiBody = Addressables.LoadAssetAsync<GameObject>((object)"RoR2/Base/Engi/EngiTurretBody.prefab").WaitForCompletion();
