@@ -42,6 +42,8 @@ namespace EngineerRedux.Utils
         /// </summary>
         public static void Init()
         {
+            Log.Info("Initializing SkillManager");
+
             // Load Prefabs
             engiBodyPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiBody.prefab").WaitForCompletion();
             turretBodyPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiTurretBody.prefab").WaitForCompletion();
@@ -88,6 +90,7 @@ namespace EngineerRedux.Utils
         /// <returns>The created <see cref="SkillFamily"/>.</returns>
         public static SkillFamily CreateSkillFamily(GameObject bodyPrefab, string skillFamilyName, string skillSlotToken)
         {
+            Log.Debug($"Creating skill family {skillFamilyName}.");
             SkillFamily skillFamily = ScriptableObject.CreateInstance<SkillFamily>();
             (skillFamily as ScriptableObject).name = bodyPrefab.name + skillFamilyName;
             skillFamily.variants = Array.Empty<SkillFamily.Variant>();
@@ -124,6 +127,8 @@ namespace EngineerRedux.Utils
 #pragma warning disable CS0618 // Variant.unlockableName is deprecated, but there isn't a better way to handle null unlockableDefs AFAIK
         public static SkillFamily AddSkillToFamily(SkillDef skillDef, SkillFamily skillFamily, UnlockableDef unlockableDef = null, bool isDefaultVariant = false)
         {
+            Log.Debug($"Adding skill {skillDef.skillName} to skill family index {skillFamily.catalogIndex}.");
+
             // Create a new variant for the skill family
             SkillFamily.Variant newVariant = new SkillFamily.Variant
             {
@@ -171,6 +176,8 @@ namespace EngineerRedux.Utils
         /// <param name="skillDescription">The description of the skill. This will be added to the LanguageAPI with the generated description token.</param>
         public static void AddLanguageTokens(SkillDef skillDef, string skillName, string skillDescription)
         {
+            Log.Debug($"Adding language tokens for skill {skillName}.");
+
             // TODO add more err handling; illegal characters, incorrect formatting, etc.
             if (string.IsNullOrEmpty(skillName) || string.IsNullOrEmpty(skillDescription))
             {
@@ -206,6 +213,7 @@ namespace EngineerRedux.Utils
         /// <returns>The added <see cref="SkillDef"/>.</returns>
         public static SkillDef AddEngiPrimary(SkillDef skillDef, string skillName, string skillDescription, UnlockableDef unlockableDef = null, bool isDefaultVariant = false)
         {
+            Log.Debug($"Adding primary skill {skillName} to Engi's loadout.");
             if (!(bool)engiBodyPrefab || !(bool)engiSkillLocator || !(bool)engiPrimarySkillFamily)
             {
                 Init();
@@ -243,6 +251,7 @@ namespace EngineerRedux.Utils
         /// <returns>The selectable <see cref="SkillDef"/> that represents the turret weapon type in Engi's loadout. This is the skill that the player will see and select in the loadout menu, NOT the skill that the turrets will use.</returns>
         public static SkillDef AddEngiTurretWeapon(SkillDef turretSkillDef, string skillName, string skillDescription, UnlockableDef unlockableDef = null, bool isDefaultVariant = false)
         {
+            Log.Debug($"Adding turret weapon skill {skillName} to Engi's loadout.");
             if (!(bool)engiBodyPrefab || !(bool)engiSkillLocator || !(bool)engiTurretWeaponSkillFamily || !(bool)turretPrimarySkillFamily)
             {
                 Init();
@@ -302,6 +311,7 @@ namespace EngineerRedux.Utils
         /// <returns>The selectable <see cref="SkillDef"/> that represents the turret body type in Engi's loadout.</returns>
         public static SkillDef AddEngiTurretBody(SkillDef skillDef, string skillName, string skillDescription, TurretBodyStats turretBodyStats, UnlockableDef unlockableDef = null, bool isDefaultVariant = false)
         {
+            Log.Debug($"Adding turret body skill {skillName} to Engi's loadout.");
             if (!(bool)engiBodyPrefab || !(bool)engiSkillLocator || !(bool)engiSpecialSkillFamily)
             {
                 Init();
@@ -371,6 +381,8 @@ namespace EngineerRedux.Utils
             {
                 return;
             }
+
+            Log.Debug("Turret summoned, applying stats and skills.");
 
             // Grab references to ownerBody and ownerSkillLocator
             CharacterBody ownerBody = report.leaderBodyInstance;

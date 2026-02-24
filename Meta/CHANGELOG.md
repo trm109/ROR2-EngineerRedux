@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Unbroke the mod. Whoopsies.
+
 ## 1.0.3
 
 - Added custom icon

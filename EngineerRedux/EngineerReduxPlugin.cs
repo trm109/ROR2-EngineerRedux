@@ -11,12 +11,17 @@ namespace EngineerRedux
 
     // using EntityStates.EngiTurret.EngiTurretWeapon;
     using R2API;
+    using R2API.ContentManagement;
+    using R2API.Utils;
     using RoR2;
     using RoR2.Skills;
     using UnityEngine;
     using UnityEngine.AddressableAssets;
 
+    [BepInDependency(SkillsAPI.PluginGUID)]
+    [BepInDependency(R2APIContentManager.PluginGUID)]
     [BepInDependency(LanguageAPI.PluginGUID)]
+    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
 #pragma warning disable SA1600, CS1591 // Elements should be documented
@@ -29,7 +34,10 @@ namespace EngineerRedux
 #pragma warning disable SA1600, CS1591// Elements should be documented
         public const string PluginName = "EngineerRedux";
 #pragma warning disable SA1600, CS1591// Elements should be documented
-        public const string PluginVersion = "1.0.3";
+        public const string PluginVersion = "1.0.4";
+
+#pragma warning disable SA1600, CS1591, SA1401// Elements should be documented
+        public static EngineerReduxPlugin Instance;
 
         // private GameObject engiBody = Addressables.LoadAssetAsync<GameObject>((object)"RoR2/Base/Engi/EngiBody.prefab").WaitForCompletion();
         // private GameObject engiBody = Addressables.LoadAssetAsync<GameObject>((object)"RoR2/Base/Engi/EngiTurretBody.prefab").WaitForCompletion();
@@ -37,8 +45,10 @@ namespace EngineerRedux
         /// <summary>
         /// Method for BepInEx to call when loading the plugin. Ignore this.
         /// </summary>
-        public static void Awake()
+        private void Awake()
         {
+            Instance = this;
+            Log.Init(this.Logger);
             Utils.SkillManager.Init();
 
             // !!!Everything after this point also serves as an example for how to use this library!!!

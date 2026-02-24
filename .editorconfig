@@ -5,3 +5,7 @@ dotnet_sort_system_directives_first = true
 csharp_new_line_before_open_brace = all
 [EngineerRedux/States/**/*.cs]
 dotnet_diagnostic.SA1600.severity = none
+[EngineerRedux/Log.cs]
+dotnet_diagnostic.SA1600.severity = none
+dotnet_diagnostic.SA1401.severity = none
+dotnet_diagnostic.SA1307.severity = none
