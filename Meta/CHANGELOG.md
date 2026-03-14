@@ -1,3 +1,8 @@
+## 1.0.5
+
+- Added Omeletttte's icons to the mod.
+- Set stationary turret's armor back to 0. Was a bit op with bungus.
+
 ## 1.0.4
 
 - Unbroke the mod. Whoopsies.

@@ -117,7 +117,6 @@ namespace EngineerRedux
                  maxHealthInc: 58.5f,
                  healthRegen: 0.9f,
                  healthRegenInc: 0.18f,
-                 armor: 30f,
                  movespeed: 0f);
             Utils.SkillManager.AddEngiTurretBody(stationaryTurretSkillDef, "StationaryTurret", "Summon a stationary turret with <style=cIsUtility>High health</style>, but <style=cIsUtility>cannot move</style>.", stationaryStats);
 

@@ -1,6 +1,6 @@
 ﻿{
 	"name": "EngineerRedux",
-	"version_number": "1.0.4",
+	"version_number": "1.0.5",
 	"website_url": "https://github.com/trm109/ROR2-EngineerRedux",
 	"description": "A mod and library aimed at expanding Engineer's loadout.",
 	"dependencies": [
