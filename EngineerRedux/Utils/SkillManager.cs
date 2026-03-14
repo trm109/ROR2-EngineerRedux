@@ -2,10 +2,11 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-// TODO make all 'add skill' methods return skillDef, and make skillName and skillDesc parameters optional, in case the caller wants to handle the language api stuff themselves.
 namespace EngineerRedux.Utils
 {
     using System;
+    using System.IO;
+    using System.Reflection;
     using BepInEx;
     using EntityStates;
     using On;
@@ -79,6 +80,51 @@ namespace EngineerRedux.Utils
 
             // Add hook on Turret Summon to swap to desired turret weapon and body types
             RoR2.MasterSummon.onServerMasterSummonGlobal += OnServerMasterSummonGlobal;
+        }
+
+        /// <summary>
+        /// Creates a sprite from an image name from an imageName of an image in the assets folder. Check the .csproj.
+        /// </summary>
+        /// <param name="imageName">The fully qualified image file name.</param>
+        /// <returns>The created <see cref="Sprite"/>.</returns>
+        public static Sprite LoadSkillIconSprite(string imageName)
+        {
+            if (string.IsNullOrEmpty(imageName))
+            {
+                Log.Error("imageName is null or empty");
+                return null;
+            }
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            using Stream stream = assembly.GetManifestResourceStream(imageName);
+            if (stream == null)
+            {
+                Log.Error("could not get image resource: " + imageName);
+                return null;
+            }
+
+            byte[] data = new byte[stream.Length];
+
+            int bytesRead = stream.Read(data, 0, data.Length);
+
+            if (bytesRead != data.Length)
+            {
+                Log.Error("Failed to read image data completely. Expected " + data.Length + " bytes, but got " + bytesRead + " bytes.");
+                return null;
+            }
+
+            Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            texture.LoadImage(data);
+            texture.filterMode = FilterMode.Bilinear;
+            texture.wrapMode = TextureWrapMode.Clamp;
+
+            texture.Apply(false, false);
+
+            return Sprite.Create(
+                texture,
+                new Rect(0, 0, texture.width, texture.height),
+                new Vector2(0.5f, 0.5f),
+                100f);
         }
 
         /// <summary>

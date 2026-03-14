@@ -36,7 +36,7 @@
 
 		<PackageReference Include="MMHOOK.RoR2" Version="2025.12.9" NoWarn="NU1701" />
 		<PackageReference Include="RiskOfRain2.GameLibs" Version="1.4.1-r.0" />
-
+		<EmbeddedResource Include="Assets\**\*.png" />
 	</ItemGroup>
 
 </Project>

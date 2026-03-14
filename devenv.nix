@@ -57,15 +57,6 @@ rec {
         echo "Build succeeded"
       fi
 
-      echo "Ensuring symlink to ${env.EXPORT_LOCATION}"
-      rm ${env.EXPORT_LOCATION}
-      ln -sf $(pwd)/Output ${env.EXPORT_LOCATION}
-      if [ $? -ne 0 ]; then
-        echo "Failed to create symlink"
-        exit 1
-      else
-        echo "Symlink created successfully"
-      fi
       cd -
     '';
     package.exec = ''
@@ -83,6 +74,18 @@ rec {
       cp -r Meta/* Thunderstore/
       cd Thunderstore/
       zip -r EngineerRedux.zip *
+
+
+      cd ${config.devenv.root}
+      echo "Ensuring symlink to ${env.EXPORT_LOCATION}"
+      rm ${env.EXPORT_LOCATION}
+      ln -sf $(pwd)/Thunderstore ${env.EXPORT_LOCATION}
+      if [ $? -ne 0 ]; then
+        echo "Failed to create symlink"
+        exit 1
+      else
+        echo "Symlink created successfully"
+      fi
       cd -
     '';
   };

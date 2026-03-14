@@ -70,9 +70,12 @@ namespace EngineerRedux
             gaussSkillDef.stockToConsume = 0;
             EngineerRedux.States.Engi.GaussPrimaryState.Init(); // Grabs hit effect, tracer, other vfx prefabs.
             gaussSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.States.Engi.GaussPrimaryState));
-            gaussSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFirePistol.asset").WaitForCompletion().icon; // placeholder icon
+
+            // gaussSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFirePistol.asset").WaitForCompletion().icon; // placeholder icon
             gaussSkillDef.stepCount = 2; // used to alternate between the two barrels
             gaussSkillDef.stepGraceDuration = 3f; // time allowed between steps before it resets to the first barrel
+            Sprite engiGaussSprite = Utils.SkillManager.LoadSkillIconSprite("EngineerRedux.Assets.SkillIcons.EngineerGauss.png");
+            gaussSkillDef.icon = engiGaussSprite;
 
             // Add the entity state
             ContentAddition.AddEntityState(typeof(EngineerRedux.States.Engi.GaussPrimaryState), out _);
@@ -93,7 +96,10 @@ namespace EngineerRedux
             beamSkillDef.stockToConsume = 0;
             EngineerRedux.States.Engi.BeamPrimaryState.Init(); // Grabs VFX references
             beamSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.States.Engi.BeamPrimaryState));
-            beamSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
+
+            // beamSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
+            Sprite engiBeamSprite = Utils.SkillManager.LoadSkillIconSprite("EngineerRedux.Assets.SkillIcons.EngineerLaser.png");
+            beamSkillDef.icon = engiBeamSprite;
 
             // Add the entity state
             ContentAddition.AddEntityState(typeof(EngineerRedux.States.Engi.BeamPrimaryState), out _);
@@ -141,7 +147,10 @@ namespace EngineerRedux
             turretGrenadeSkillDef.cancelSprintingOnActivation = false;
             EngineerRedux.States.Turret.GrenadePrimaryState.Init(); // Grabs VFX references
             turretGrenadeSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.States.Turret.GrenadePrimaryState));
-            turretGrenadeSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiBodyFireGrenade.asset").WaitForCompletion().icon;
+
+            // turretGrenadeSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Engi/EngiBodyFireGrenade.asset").WaitForCompletion().icon;
+            Sprite turretGrenadeSprite = Utils.SkillManager.LoadSkillIconSprite("EngineerRedux.Assets.SkillIcons.TurretGrenade.png");
+            turretGrenadeSkillDef.icon = turretGrenadeSprite;
 
             // Add the entity state
             ContentAddition.AddEntityState(typeof(EngineerRedux.States.Turret.GrenadePrimaryState), out _);
@@ -157,7 +166,10 @@ namespace EngineerRedux
             turretGaussSkillDef.cancelSprintingOnActivation = false;
             turretGaussSkillDef.baseRechargeInterval = 0f;
             turretGaussSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.States.Turret.GaussPrimaryState));
-            turretGaussSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFirePistol.asset").WaitForCompletion().icon; // placeholder icon
+
+            // turretGaussSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFirePistol.asset").WaitForCompletion().icon; // placeholder icon
+            Sprite turretGaussSprite = Utils.SkillManager.LoadSkillIconSprite("EngineerRedux.Assets.SkillIcons.TurretGauss.png");
+            turretGaussSkillDef.icon = turretGaussSprite;
 
             // Add the entity state
             ContentAddition.AddEntityState(typeof(EngineerRedux.States.Turret.GaussPrimaryState), out _);
@@ -179,7 +191,10 @@ namespace EngineerRedux
             turretBeamSkillDef.stockToConsume = 1;
             EngineerRedux.States.Turret.BeamPrimaryState.Init(); // Grabs VFX references
             turretBeamSkillDef.activationState = new SerializableEntityStateType(typeof(EngineerRedux.States.Turret.BeamPrimaryState));
-            turretBeamSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
+
+            // turretBeamSkillDef.icon = Addressables.LoadAssetAsync<SkillDef>("RoR2/Base/Commando/CommandoBodyFireFMJ.asset").WaitForCompletion().icon; // placeholder icon
+            Sprite turretBeamSprite = Utils.SkillManager.LoadSkillIconSprite("EngineerRedux.Assets.SkillIcons.TurretLaser.png");
+            turretBeamSkillDef.icon = turretBeamSprite;
 
             // Add the entity state
             ContentAddition.AddEntityState(typeof(EngineerRedux.States.Turret.BeamPrimaryState), out _);

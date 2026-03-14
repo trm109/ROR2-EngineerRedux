@@ -4,6 +4,8 @@
 
 _For questions/concerns, make an issue on the GitHub, or contact me on Discord (\_s.k)_
 
+_Massive thanks to Omeletttte for the skill icons!_
+
 Ever wished you could have Mobile Turrets with bullets instead of lasers? Ever wished the engineer could use lasers instead of grenades? Ever wished your turrets could shoot grenades?
 
 This is the mod for you!
