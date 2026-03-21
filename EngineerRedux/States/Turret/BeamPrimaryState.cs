@@ -16,8 +16,8 @@ namespace EngineerRedux.States.Turret
     {
         // Lots of code was taken from SS2's Laser Focus ability, ty!
         private static float fireFrequency = 5f; // Default
-        private static float damageCoefficient = .4f; // Default
-        private static float procCoefficient = 1f; // Default is 0.6f, this is a bit unfair for things like ATG.
+        private static float damageCoefficient = 0.4f; // Default
+        private static float procCoefficient = 0.6f; // Default is 0.6f, this is a bit unfair for things like ATG.
         private static float force = 0f;
         private static float maxRange = 300f; // Default is 25, but for useability its buffed to 300.
 
