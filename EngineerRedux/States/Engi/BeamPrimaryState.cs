@@ -180,7 +180,6 @@ namespace EngineerRedux.States.Engi
                 bulletAttack.maxSpread = this.characterBody.spreadBloomAngle;
                 bulletAttack.damage = damageCoefficient * this.damageStat;
                 bulletAttack.force = force;
-                bulletAttack.falloffModel = BulletAttack.FalloffModel.None;
                 bulletAttack.muzzleName = targetMuzzle;
                 bulletAttack.hitEffectPrefab = hitEffectPrefab;
                 bulletAttack.isCrit = Util.CheckRoll(this.critStat, this.characterBody.master);
