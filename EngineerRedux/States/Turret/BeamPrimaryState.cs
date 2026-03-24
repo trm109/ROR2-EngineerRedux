@@ -152,7 +152,6 @@ namespace EngineerRedux.States.Turret
                 bulletAttack.maxSpread = this.characterBody.spreadBloomAngle;
                 bulletAttack.damage = damageCoefficient * this.damageStat;
                 bulletAttack.force = force;
-                bulletAttack.falloffModel = BulletAttack.FalloffModel.None;
 
                 // bulletAttack.muzzleName = targetMuzzle;
                 bulletAttack.hitEffectPrefab = hitEffectPrefab;
