@@ -8,6 +8,8 @@
 namespace EngineerRedux.States.Engi
 {
     using EntityStates;
+    using R2API;
+    using R2API.ContentManagement;
     using RoR2;
     using RoR2.Skills;
     using UnityEngine;
@@ -44,7 +46,9 @@ namespace EngineerRedux.States.Engi
         public static void Init()
         {
             // Assign VFX references
-            muzzleEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/MuzzleflashEngiTurret.prefab").WaitForCompletion();
+            muzzleEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/MuzzleflashSmokeRing.prefab").WaitForCompletion();
+
+            // Creating my own copy to downsize it. Otherwise, it looks way to big and obscures player vision.
             hitEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/ImpactEngiTurret.prefab").WaitForCompletion();
             tracerEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/TracerEngiTurret.prefab").WaitForCompletion();
         }
