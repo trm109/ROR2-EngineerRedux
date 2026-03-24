@@ -10,6 +10,8 @@ Ever wished you could have Mobile Turrets with bullets instead of lasers? Ever w
 
 This is the mod for you!
 
+**I highly recommend using [ProcPatcher](https://thunderstore.io/c/riskofrain2/p/RiskOfBrainrot/ProcPatcher/) alongside this mod so the laser attack isn't at a massive disadvantage with items like Ukelele and ATG**
+
 ## What it does:
 ### Gives Engineer access to turret primaries:
 
@@ -25,8 +27,8 @@ This is the mod for you!
 
 - Fires two continuous lasers from both barrels, dealing **40%** damage, **10** times per second.
 - Enemies hit by the laser are slowed by **50%**.
-- **1.0 Proc Coefficient**, so things like ATGs actually work.
-- Max range of **300m**, with no damage falloff.
+- **0.6** Proc Coeff (Default)
+- Max range of **300m**
 ---
 
 ### Gives turrets access to engineer primaries:
@@ -51,8 +53,8 @@ This is the mod for you!
 
 - Turrets fire a continuous laser, dealing **40%** damage, **5** times per second.
 - Enemies hit by the laser are slowed by **50%**.
-- **1.0 Proc Coefficient**, so things like ATGs actually work.
-- Max range of **300m**, with no damage falloff.
+- **0.6** Proc Coeff (Default)
+- Max range of **300m**
 ---
 
 ### Other changes:

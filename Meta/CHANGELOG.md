@@ -1,3 +1,9 @@
+## 1.0.6
+
+- Reverted Laser's proc coeff to 0.6.
+- Laser now has standard damage falloff.
+- Used a smaller vfx prefab for Gauss Primary.
+
 ## 1.0.5
 
 - Added Omeletttte's icons to the mod.
